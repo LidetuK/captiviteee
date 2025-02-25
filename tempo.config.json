@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "git": {
+    "retryAttempts": 3,
+    "retryDelay": 5000,
+    "timeout": 30000
+  },
+  "build": {
+    "waitForLoad": true,
+    "loadTimeout": 60000
+  },
+  "debug": true
+}
