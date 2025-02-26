@@ -3,7 +3,7 @@ name: Deploy Vite Project to GitHub Pages
 on:
   push:
     branches:
-      - main  # Change if your main branch is different
+      - main  # Deploy when changes are pushed to main
 
 permissions:
   contents: write
@@ -18,16 +18,16 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20  # Use the Node.js version that matches your project
+          node-version: 20  # Or whichever version you use
 
       - name: Install dependencies
-        run: npm install  # Installs project dependencies
+        run: npm install
 
       - name: Build the project
-        run: npm run build  # Runs Vite build (check your package.json for scripts)
+        run: npm run build  # Builds the project into the dist/ folder
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages
-          folder: dist  # Vite outputs built files into the "dist" folder
+          branch: gh-pages  # Push to gh-pages branch
+          folder: dist       # Only push the contents of dist/ to gh-pages
