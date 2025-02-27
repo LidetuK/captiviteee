@@ -40,7 +40,7 @@ interface NavbarProps {
   logo?: string;
 }
 
-const defaultLogo = "/CAPTIVITE-X/Public/assets/logo.png";
+const defaultLogo = "/CAPTIVITE-X/assets/logo.png";
 
 
 
