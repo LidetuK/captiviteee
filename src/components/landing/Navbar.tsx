@@ -40,7 +40,7 @@ interface NavbarProps {
   logo?: string;
 }
 
-const defaultLogo = "/assets/logo.png";
+const defaultLogo = "/assets/LOGO.png";
 
 
 
