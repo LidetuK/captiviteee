@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react";  
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Navigate, useLocation } from "react-router-dom";
@@ -10,7 +10,7 @@ interface AuthState {
   logout: () => void;
 }
 
-export const useAuth = create<AuthState>(
+export const useAuth = create<AuthState>()(
   persist(
     (set) => ({
       isAuthenticated: false,
@@ -26,8 +26,8 @@ export const useAuth = create<AuthState>(
     }),
     {
       name: "auth-storage",
-    },
-  ),
+    }
+  )
 );
 
 export const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
