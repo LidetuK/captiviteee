@@ -40,7 +40,7 @@ interface NavbarProps {
   logo?: string;
 }
 
-const defaultLogo = "/CAPTIVITE-X/public/assets/logo.png";
+const defaultLogo = "/CAPTIVITE-X//assets/logo.png";
 
 
 
@@ -221,7 +221,13 @@ const Navbar = ({
         {/* Logo */}
         <div className="flex items-center">
           <div onClick={() => navigate("/")} className="cursor-pointer">
-         
+          <LazyImage
+  src="/CAPTIVITE-X/Public/assets/logo.png"
+  alt="Captivite Logo"
+  className="w-40 h-40 object-contain"  // Increased size
+  fallback="https://api.dicebear.com/7.x/initials/svg?seed=C"
+/>
+
 
           </div>
           <span
