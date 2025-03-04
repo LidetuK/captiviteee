@@ -11,8 +11,7 @@ if (process.env.TEMPO === "true") {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: process.env.VERCEL_ENV ? "/" : "/CAPTIVITE-X/",
-  // 👈 Add this line for GitHub Pages
+  base: "/CAPTIVITE-X/", // 👈 Add this line for GitHub Pages
   plugins: [
     react({
       plugins: [...conditionalPlugins],

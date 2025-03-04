@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import {
   Menu,
-  Users,
+  X,
   MessageSquare,
   Calendar,
   Star,
@@ -29,26 +29,22 @@ import {
   BookOpen,
   ClipboardList,
   HelpCircle,
+  Users,
   Video,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 interface NavbarProps {
-  className?: string;
   onDemoClick?: () => void;
   onConsultationClick?: () => void;
   logo?: string;
 }
 
-const defaultLogo = "/CAPTIVITE-X/Public/assets/logo.png";
-
-
-
 const Navbar = ({
   className = "",
   onDemoClick = () => {},
   onConsultationClick = () => {},
-  logo = defaultLogo,
+  logo = "https://api.dicebear.com/7.x/initials/svg?seed=Captivite",
 }: NavbarProps) => {
   const navigate = useNavigate();
   interface MenuItem {
@@ -216,24 +212,23 @@ const Navbar = ({
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 glass border-b bg-background/80 backdrop-blur-sm ${className}`}>
+    <nav className="fixed top-0 left-0 right-0 z-50 glass border-b bg-background/80 backdrop-blur-sm">
       <div className="container flex items-center justify-between h-20 px-4 mx-auto">
         {/* Logo */}
         <div className="flex items-center">
           <div onClick={() => navigate("/")} className="cursor-pointer">
-          <LazyImage
-  src={logo}
-  alt="Captivite Logo"
-  className="w-40 h-40 object-contain"  // Increased size
-  fallback="https://api.dicebear.com/7.x/initials/svg?seed=C"
-/>
-
+            <LazyImage
+              src={logo}
+              alt="Captivite Logo"
+              className="w-10 h-10"
+              fallback="https://api.dicebear.com/7.x/initials/svg?seed=C"
+            />
           </div>
           <span
             onClick={() => navigate("/")}
             className="ml-2 text-xl font-bold cursor-pointer"
           >
-            
+            Captivite
           </span>
         </div>
 
