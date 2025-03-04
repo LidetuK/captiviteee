@@ -40,6 +40,13 @@ interface NavbarProps {
   logo?: string;
 }
 
+<<<<<<< HEAD
+=======
+const defaultLogo = "/assets/LOGO.png";
+
+
+
+>>>>>>> 430d7b9a565b2402a17250c2cf319863cb1ebcf8
 const Navbar = ({
   className = "",
   onDemoClick = () => {},
@@ -217,12 +224,23 @@ const Navbar = ({
         {/* Logo */}
         <div className="flex items-center">
           <div onClick={() => navigate("/")} className="cursor-pointer">
+<<<<<<< HEAD
             <LazyImage
               src={logo}
               alt="Captivite Logo"
               className="w-10 h-10"
               fallback="https://api.dicebear.com/7.x/initials/svg?seed=C"
             />
+=======
+          <LazyImage
+  src="/assets/LOGO.png"
+  alt="Captivite Logo"
+  className="w-40 h-40 object-contain"  // Increased size
+  fallback="https://api.dicebear.com/7.x/initials/svg?seed=C"
+/>
+
+
+>>>>>>> 430d7b9a565b2402a17250c2cf319863cb1ebcf8
           </div>
           <span
             onClick={() => navigate("/")}
