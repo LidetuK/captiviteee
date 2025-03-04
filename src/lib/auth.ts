@@ -1,7 +1,5 @@
-import React from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Navigate, useLocation } from "react-router-dom";
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -29,14 +27,3 @@ export const useAuth = create<AuthState>(
     },
   ),
 );
-
-export const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useAuth();
-  const location = useLocation();
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-
-  return <>{children}</>;
-};
