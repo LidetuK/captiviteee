@@ -7,13 +7,22 @@ interface PerformanceMetrics {
   timestamp: Date;
 }
 
+interface PerformanceAnalysis {
+  current: PerformanceMetrics;
+  averages: Omit<PerformanceMetrics, "timestamp">;
+  trends: Record<keyof Omit<PerformanceMetrics, "timestamp">, "increasing" | "decreasing" | "stable">;
+  recommendations: string[];
+}
+
+type TrendDirection = "increasing" | "decreasing" | "stable";
+
 export const performanceOptimizer = {
   metrics: new Map<string, PerformanceMetrics[]>(),
 
   recordMetrics: async (
     serviceId: string,
     metrics: Omit<PerformanceMetrics, "timestamp">,
-  ) => {
+  ): Promise<PerformanceMetrics> => {
     const data: PerformanceMetrics = {
       ...metrics,
       timestamp: new Date(),
@@ -27,7 +36,7 @@ export const performanceOptimizer = {
     return data;
   },
 
-  analyzePerformance: (serviceId: string) => {
+  analyzePerformance: (serviceId: string): PerformanceAnalysis | null => {
     const metrics = performanceOptimizer.metrics.get(serviceId) || [];
     if (metrics.length === 0) return null;
 
@@ -43,11 +52,11 @@ export const performanceOptimizer = {
     };
   },
 
-  optimizeResources: async (serviceId: string) => {
+  optimizeResources: async (serviceId: string): Promise<string[] | null> => {
     const analysis = performanceOptimizer.analyzePerformance(serviceId);
     if (!analysis) return null;
 
-    const optimizations = [];
+    const optimizations: string[] = [];
 
     if (analysis.averages.cpu > 80) {
       optimizations.push("Increase CPU allocation");
@@ -64,7 +73,7 @@ export const performanceOptimizer = {
 };
 
 // Helper functions
-const calculateAverages = (metrics: PerformanceMetrics[]) => {
+const calculateAverages = (metrics: PerformanceMetrics[]): Omit<PerformanceMetrics, "timestamp"> => {
   return {
     cpu: average(metrics.map((m) => m.cpu)),
     memory: average(metrics.map((m) => m.memory)),
@@ -74,7 +83,9 @@ const calculateAverages = (metrics: PerformanceMetrics[]) => {
   };
 };
 
-const calculateTrends = (metrics: PerformanceMetrics[]) => {
+const calculateTrends = (
+  metrics: PerformanceMetrics[],
+): Record<keyof Omit<PerformanceMetrics, "timestamp">, TrendDirection> => {
   return {
     cpu: calculateTrend(metrics.map((m) => m.cpu)),
     memory: calculateTrend(metrics.map((m) => m.memory)),
@@ -88,17 +99,18 @@ const average = (numbers: number[]): number => {
   return numbers.reduce((a, b) => a + b, 0) / numbers.length;
 };
 
-const calculateTrend = (
-  values: number[],
-): "increasing" | "decreasing" | "stable" => {
+const calculateTrend = (values: number[]): TrendDirection => {
   if (values.length < 2) return "stable";
   const change = values[values.length - 1] - values[0];
   if (Math.abs(change) < 0.1) return "stable";
   return change > 0 ? "increasing" : "decreasing";
 };
 
-const generateRecommendations = (averages: any, trends: any) => {
-  const recommendations = [];
+const generateRecommendations = (
+  averages: Omit<PerformanceMetrics, "timestamp">,
+  trends: Record<keyof Omit<PerformanceMetrics, "timestamp">, TrendDirection>,
+): string[] => {
+  const recommendations: string[] = [];
 
   if (averages.cpu > 80 && trends.cpu === "increasing") {
     recommendations.push("Critical: CPU utilization trending high");

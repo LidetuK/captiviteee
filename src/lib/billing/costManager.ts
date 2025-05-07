@@ -17,6 +17,14 @@ interface Budget {
   alerts: number[];
 }
 
+interface BudgetAlert {
+  threshold: number;
+  currentUsage: number;
+  resourceType: string;
+}
+
+type CostRecommendation = string;
+
 export const costManager = {
   costs: new Map<string, ResourceCost[]>(),
   budgets: new Map<string, Budget>(),
@@ -65,7 +73,7 @@ export const costManager = {
     budget.used = totalCost;
 
     const usagePercentage = (totalCost / budget.limit) * 100;
-    const alerts = [];
+    const alerts: BudgetAlert[] = [];
 
     for (const threshold of budget.alerts) {
       if (usagePercentage >= threshold) {
@@ -122,7 +130,7 @@ export const costManager = {
   },
 
   optimizeCosts: () => {
-    const recommendations = [];
+    const recommendations: CostRecommendation[] = [];
 
     costManager.costs.forEach((costs, resourceType) => {
       const recentCosts = costs.slice(-30); // Last 30 days

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { Link } from "react-router-dom";
 import { Check } from "lucide-react";
 import ROICalculator from "./ROICalculator";
 
@@ -22,6 +23,7 @@ interface PricingTier {
   description: string;
   features: string[];
   includedServices: string[];
+  link: string;
 }
 
 interface PricingSectionProps {
@@ -83,6 +85,7 @@ const defaultPricingTiers: PricingTier[] = [
       "Service updates",
     ],
     includedServices: [],
+    link: "/CAPTIVITE-X/get-started?plan=single",
   },
   {
     name: "Business Bundle",
@@ -99,6 +102,7 @@ const defaultPricingTiers: PricingTier[] = [
       "Integration support",
     ],
     includedServices: [],
+    link: "/CAPTIVITE-X/get-started?plan=business",
   },
   {
     name: "Enterprise",
@@ -116,6 +120,7 @@ const defaultPricingTiers: PricingTier[] = [
       "Advanced API access",
     ],
     includedServices: ["all"],
+    link: "/CAPTIVITE-X/contact-sales",
   },
 ];
 
@@ -126,7 +131,10 @@ const PricingSection = ({
   const [isYearly, setIsYearly] = useState(false);
 
   return (
-    <section className="w-full py-16 bg-gray-50">
+    <section
+      className="py-20 bg-gradient-to-br from-background via-accent/5 to-background"
+      id="pricing"
+    >
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold mb-4">
@@ -188,9 +196,9 @@ const PricingSection = ({
               <Button
                 className="w-full"
                 variant={index === 1 ? "default" : "outline"}
-                onClick={() => onPlanSelect(tier.name)}
+                asChild
               >
-                Get Started
+                <Link to={tier.link}>Get Started</Link>
               </Button>
             </Card>
           ))}

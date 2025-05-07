@@ -1,22 +1,22 @@
 import { setupServer } from "msw/node";
-import { rest } from "msw";
+import { http } from "msw";
 
 export const server = setupServer(
-  rest.post("/api/consultation/request", (req, res, ctx) => {
-    return res(
-      ctx.json({
+  http.post("/api/consultation/request", () => {
+    return new Response(
+      JSON.stringify({
         success: true,
         appointmentId: "123",
-      }),
+      })
     );
   }),
 
-  rest.get("/api/health", (req, res, ctx) => {
-    return res(
-      ctx.json({
+  http.get("/api/health", () => {
+    return new Response(
+      JSON.stringify({
         status: "healthy",
         version: "1.0.0",
-      }),
+      })
     );
   }),
 );

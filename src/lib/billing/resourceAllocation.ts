@@ -81,7 +81,7 @@ export const resourceAllocation = {
   },
 
   optimizeAllocations: () => {
-    const recommendations = [];
+    const recommendations: string[] = [];
     const departmentCosts = resourceAllocation.calculateCosts();
 
     Object.values(departmentCosts).forEach((dept) => {

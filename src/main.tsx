@@ -2,13 +2,18 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
-import { TempoDevtools } from "tempo-devtools";
+import { AuthProvider } from "./lib/auth.tsx";
+import { Toaster } from "./components/ui/toaster";
 
-// Initialize Tempo Devtools
+// Import the dev tools and initialize them
+import { TempoDevtools } from "tempo-devtools";
 TempoDevtools.init();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    <AuthProvider>
+      <App />
+      <Toaster />
+    </AuthProvider>
   </React.StrictMode>,
 );

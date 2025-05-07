@@ -60,7 +60,7 @@ export const resourceManager = {
 
   optimizeResources: async () => {
     const usage = resourceManager.getResourceUsage();
-    const recommendations = [];
+    const recommendations: string[] = [];
 
     Object.entries(usage).forEach(([type, metrics]) => {
       const utilizationRate = metrics.used / metrics.total;

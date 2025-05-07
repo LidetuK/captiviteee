@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, PlayCircle } from "lucide-react";
 import TypewriterText from "./TypewriterText";
@@ -77,9 +78,12 @@ const HeroSection = ({
             size="lg"
             onClick={onDemoClick}
             className="bg-primary hover:bg-primary/90 text-white"
+            asChild
           >
-            <PlayCircle className="mr-2 h-5 w-5" />
-            Watch Demo
+            <Link to="/CAPTIVITE-X/get-started">
+              <PlayCircle className="mr-2 h-5 w-5" />
+              Watch Demo
+            </Link>
           </Button>
           <Button
             size="lg"

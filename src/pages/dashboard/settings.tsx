@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User, Bell, Shield, Palette } from "lucide-react";
+import { User, Bell, Shield, Palette, Sun, Moon, Laptop } from "lucide-react";
 
 const SettingsPage = () => {
   return (

@@ -5,6 +5,14 @@ interface MetricData {
   metrics: Record<string, number>;
 }
 
+interface Anomaly {
+  timestamp: Date;
+  metric: string;
+  value: number;
+  expected: number;
+  deviation: number;
+}
+
 export const modelMonitoring = {
   metrics: new Map<string, MetricData[]>(),
 
@@ -60,7 +68,7 @@ export const modelMonitoring = {
 
   detectAnomalies: (metrics: MetricData[]) => {
     const stats = modelMonitoring.calculateStats(metrics);
-    const anomalies = [];
+    const anomalies: Anomaly[] = [];
 
     metrics.forEach((data) => {
       Object.entries(data.metrics).forEach(([key, value]) => {

@@ -11,12 +11,11 @@ if (process.env.TEMPO === "true") {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/CAPTIVITE-X/", // 👈 Add this line for GitHub Pages
   plugins: [
     react({
-      plugins: [...conditionalPlugins],
+      plugins: [...conditionalPlugins], // Add the conditional plugin
     }),
-    tempo(),
+    tempo(), // Add the tempo plugin
   ],
   resolve: {
     alias: {

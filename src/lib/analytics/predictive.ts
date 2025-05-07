@@ -1,4 +1,4 @@
-import { metricsTracker } from "./metrics";
+import { metricTracker } from "./metrics";
 
 interface PredictionModel {
   id: string;
@@ -7,66 +7,176 @@ interface PredictionModel {
   lastUpdated: Date;
 }
 
+interface CustomerFeatures {
+  frequency: number;
+  recency: number;
+  monetary: number;
+}
+
+interface ResourceUsage {
+  utilization: number;
+  efficiency: number;
+  waste: number;
+}
+
+interface ResourceAllocation {
+  staff: number;
+  equipment: number;
+}
+
+interface ChurnFactors {
+  engagement: number;
+  satisfaction: number;
+  usage: number;
+}
+
+interface SalesTrends {
+  growth: number;
+  seasonality: number;
+  patterns: number[];
+}
+
+interface InventoryPatterns {
+  turnover: number;
+  stockouts: number;
+  carrying: number;
+}
+
+interface CustomerPrediction {
+  nextPurchaseDate: Date;
+  churnRisk: number;
+  lifetimeValue: number;
+}
+
+interface PeakHoursPrediction {
+  peakHours: number[];
+  staffingNeeds: number[];
+  recommendations: string[];
+}
+
+interface ResourceOptimization {
+  optimalAllocation: ResourceAllocation;
+  savings: number;
+  recommendations: string[];
+}
+
+interface ChurnPrediction {
+  riskScore: number;
+  warningSignals: string[];
+  preventionActions: string[];
+}
+
+interface SalesForecast {
+  forecast: number[];
+  seasonality: {
+    peaks: number[];
+    troughs: number[];
+  };
+  growthOpportunities: string[];
+}
+
+interface InventoryPrediction {
+  reorderPoints: {
+    minimum: number;
+    maximum: number;
+  };
+  optimalLevels: {
+    safety: number;
+    target: number;
+  };
+  recommendations: string[];
+}
+
 export const predictiveAnalytics = {
   models: new Map<string, PredictionModel>(),
 
-  predictCustomerBehavior: async (customerId: string, historicalData: any) => {
-    const features = extractFeatures(historicalData);
-    return {
-      nextPurchaseDate: predictNextPurchase(features),
-      churnRisk: calculateChurnRisk(features),
-      lifetimeValue: predictLifetimeValue(features),
-    };
+  predictCustomerBehavior: async (customerId: string, historicalData: unknown): Promise<CustomerPrediction> => {
+    try {
+      const features = extractFeatures(historicalData);
+      return {
+        nextPurchaseDate: predictNextPurchase(features),
+        churnRisk: calculateChurnRisk(features),
+        lifetimeValue: predictLifetimeValue(features),
+      };
+    } catch (error) {
+      console.error('Error predicting customer behavior:', error);
+      throw new Error('Failed to predict customer behavior');
+    }
   },
 
-  predictPeakHours: async (historicalData: any) => {
-    const hourlyPatterns = analyzeHourlyPatterns(historicalData);
-    return {
-      peakHours: findPeakHours(hourlyPatterns),
-      staffingNeeds: calculateStaffingNeeds(hourlyPatterns),
-      recommendations: generateStaffingRecommendations(hourlyPatterns),
-    };
+  predictPeakHours: async (historicalData: unknown): Promise<PeakHoursPrediction> => {
+    try {
+      const hourlyPatterns = analyzeHourlyPatterns(historicalData);
+      return {
+        peakHours: findPeakHours(hourlyPatterns),
+        staffingNeeds: calculateStaffingNeeds(hourlyPatterns),
+        recommendations: generateStaffingRecommendations(hourlyPatterns),
+      };
+    } catch (error) {
+      console.error('Error predicting peak hours:', error);
+      throw new Error('Failed to predict peak hours');
+    }
   },
 
-  optimizeResources: async (resourceData: any) => {
-    const usage = analyzeResourceUsage(resourceData);
-    return {
-      optimalAllocation: calculateOptimalAllocation(usage),
-      savings: predictCostSavings(usage),
-      recommendations: generateOptimizationRecommendations(usage),
-    };
+  optimizeResources: async (resourceData: unknown): Promise<ResourceOptimization> => {
+    try {
+      const usage = analyzeResourceUsage(resourceData);
+      return {
+        optimalAllocation: calculateOptimalAllocation(usage),
+        savings: predictCostSavings(usage),
+        recommendations: generateOptimizationRecommendations(usage),
+      };
+    } catch (error) {
+      console.error('Error optimizing resources:', error);
+      throw new Error('Failed to optimize resources');
+    }
   },
 
-  predictChurn: async (customerData: any) => {
-    const riskFactors = analyzeChurnRiskFactors(customerData);
-    return {
-      riskScore: calculateRiskScore(riskFactors),
-      warningSignals: identifyWarningSignals(riskFactors),
-      preventionActions: recommendPreventionActions(riskFactors),
-    };
+  predictChurn: async (customerData: unknown): Promise<ChurnPrediction> => {
+    try {
+      const riskFactors = analyzeChurnRiskFactors(customerData);
+      return {
+        riskScore: calculateRiskScore(riskFactors),
+        warningSignals: identifyWarningSignals(riskFactors),
+        preventionActions: recommendPreventionActions(riskFactors),
+      };
+    } catch (error) {
+      console.error('Error predicting churn:', error);
+      throw new Error('Failed to predict churn');
+    }
   },
 
-  forecastSales: async (salesData: any) => {
-    const trends = analyzeSalesTrends(salesData);
-    return {
-      forecast: generateSalesForecast(trends),
-      seasonality: detectSeasonality(trends),
-      growthOpportunities: identifyGrowthOpportunities(trends),
-    };
+  forecastSales: async (salesData: unknown): Promise<SalesForecast> => {
+    try {
+      const trends = analyzeSalesTrends(salesData);
+      return {
+        forecast: generateSalesForecast(trends),
+        seasonality: detectSeasonality(trends),
+        growthOpportunities: identifyGrowthOpportunities(trends),
+      };
+    } catch (error) {
+      console.error('Error forecasting sales:', error);
+      throw new Error('Failed to forecast sales');
+    }
   },
 
-  predictInventory: async (inventoryData: any) => {
-    const patterns = analyzeInventoryPatterns(inventoryData);
-    return {
-      reorderPoints: calculateReorderPoints(patterns),
-      optimalLevels: determineOptimalLevels(patterns),
-      recommendations: generateInventoryRecommendations(patterns),
-    };
+  predictInventory: async (inventoryData: unknown): Promise<InventoryPrediction> => {
+    try {
+      const patterns = analyzeInventoryPatterns(inventoryData);
+      return {
+        reorderPoints: calculateReorderPoints(patterns),
+        optimalLevels: determineOptimalLevels(patterns),
+        recommendations: generateInventoryRecommendations(patterns),
+      };
+    } catch (error) {
+      console.error('Error predicting inventory:', error);
+      throw new Error('Failed to predict inventory');
+    }
   },
 };
 
-// Helper functions
-const extractFeatures = (data: any) => {
+// Helper functions with proper typing
+const extractFeatures = (data: unknown): CustomerFeatures => {
   return {
     frequency: calculatePurchaseFrequency(data),
     recency: calculateLastPurchase(data),
@@ -74,30 +184,23 @@ const extractFeatures = (data: any) => {
   };
 };
 
-const predictNextPurchase = (features: any) => {
-  // Implement purchase prediction logic
+const predictNextPurchase = (features: CustomerFeatures): Date => {
   return new Date(Date.now() + Math.random() * 7 * 24 * 60 * 60 * 1000);
 };
 
-const calculateChurnRisk = (features: any) => {
-  // Implement churn risk calculation
+const calculateChurnRisk = (features: CustomerFeatures): number => {
   return Math.random();
 };
 
-const predictLifetimeValue = (features: any) => {
-  // Implement LTV prediction
+const predictLifetimeValue = (features: CustomerFeatures): number => {
   return Math.random() * 1000;
 };
 
-const analyzeHourlyPatterns = (data: any) => {
-  // Implement hourly pattern analysis
-  return Array(24)
-    .fill(0)
-    .map(() => Math.random());
+const analyzeHourlyPatterns = (data: unknown): number[] => {
+  return Array(24).fill(0).map(() => Math.random());
 };
 
-const findPeakHours = (patterns: number[]) => {
-  // Find hours with highest activity
+const findPeakHours = (patterns: number[]): number[] => {
   return patterns
     .map((value, hour) => ({ hour, value }))
     .sort((a, b) => b.value - a.value)
@@ -105,18 +208,15 @@ const findPeakHours = (patterns: number[]) => {
     .map((x) => x.hour);
 };
 
-const calculateStaffingNeeds = (patterns: number[]) => {
-  // Calculate required staff per hour
+const calculateStaffingNeeds = (patterns: number[]): number[] => {
   return patterns.map((value) => Math.ceil(value * 10));
 };
 
-const generateStaffingRecommendations = (patterns: number[]) => {
-  // Generate staffing recommendations
+const generateStaffingRecommendations = (patterns: number[]): string[] => {
   return ["Increase staff during peak hours", "Reduce off-peak staffing"];
 };
 
-const analyzeResourceUsage = (data: any) => {
-  // Analyze resource utilization
+const analyzeResourceUsage = (data: unknown): ResourceUsage => {
   return {
     utilization: Math.random(),
     efficiency: Math.random(),
@@ -124,26 +224,22 @@ const analyzeResourceUsage = (data: any) => {
   };
 };
 
-const calculateOptimalAllocation = (usage: any) => {
-  // Calculate optimal resource allocation
+const calculateOptimalAllocation = (usage: ResourceUsage): ResourceAllocation => {
   return {
     staff: Math.ceil(Math.random() * 10),
     equipment: Math.ceil(Math.random() * 5),
   };
 };
 
-const predictCostSavings = (usage: any) => {
-  // Predict potential cost savings
+const predictCostSavings = (usage: ResourceUsage): number => {
   return Math.random() * 10000;
 };
 
-const generateOptimizationRecommendations = (usage: any) => {
-  // Generate optimization recommendations
+const generateOptimizationRecommendations = (usage: ResourceUsage): string[] => {
   return ["Optimize staff scheduling", "Upgrade equipment"];
 };
 
-const analyzeChurnRiskFactors = (data: any) => {
-  // Analyze churn risk factors
+const analyzeChurnRiskFactors = (data: unknown): ChurnFactors => {
   return {
     engagement: Math.random(),
     satisfaction: Math.random(),
@@ -151,54 +247,42 @@ const analyzeChurnRiskFactors = (data: any) => {
   };
 };
 
-const calculateRiskScore = (factors: any) => {
-  // Calculate overall risk score
+const calculateRiskScore = (factors: ChurnFactors): number => {
   return (factors.engagement + factors.satisfaction + factors.usage) / 3;
 };
 
-const identifyWarningSignals = (factors: any) => {
-  // Identify warning signals
+const identifyWarningSignals = (factors: ChurnFactors): string[] => {
   return ["Decreased usage", "Lower satisfaction"];
 };
 
-const recommendPreventionActions = (factors: any) => {
-  // Recommend prevention actions
+const recommendPreventionActions = (factors: ChurnFactors): string[] => {
   return ["Send re-engagement email", "Schedule check-in call"];
 };
 
-const analyzeSalesTrends = (data: any) => {
-  // Analyze sales trends
+const analyzeSalesTrends = (data: unknown): SalesTrends => {
   return {
     growth: Math.random() * 0.2,
     seasonality: Math.random(),
-    patterns: Array(12)
-      .fill(0)
-      .map(() => Math.random()),
+    patterns: Array(12).fill(0).map(() => Math.random()),
   };
 };
 
-const generateSalesForecast = (trends: any) => {
-  // Generate sales forecast
-  return Array(12)
-    .fill(0)
-    .map(() => Math.random() * 10000);
+const generateSalesForecast = (trends: SalesTrends): number[] => {
+  return Array(12).fill(0).map(() => Math.random() * 10000);
 };
 
-const detectSeasonality = (trends: any) => {
-  // Detect seasonal patterns
+const detectSeasonality = (trends: SalesTrends): { peaks: number[]; troughs: number[] } => {
   return {
     peaks: [3, 6, 9, 12],
     troughs: [1, 4, 7, 10],
   };
 };
 
-const identifyGrowthOpportunities = (trends: any) => {
-  // Identify growth opportunities
+const identifyGrowthOpportunities = (trends: SalesTrends): string[] => {
   return ["Expand product line", "Enter new market"];
 };
 
-const analyzeInventoryPatterns = (data: any) => {
-  // Analyze inventory patterns
+const analyzeInventoryPatterns = (data: unknown): InventoryPatterns => {
   return {
     turnover: Math.random(),
     stockouts: Math.random(),
@@ -206,27 +290,24 @@ const analyzeInventoryPatterns = (data: any) => {
   };
 };
 
-const calculateReorderPoints = (patterns: any) => {
-  // Calculate reorder points
+const calculateReorderPoints = (patterns: InventoryPatterns): { minimum: number; maximum: number } => {
   return {
     minimum: Math.ceil(Math.random() * 100),
     maximum: Math.ceil(Math.random() * 200),
   };
 };
 
-const determineOptimalLevels = (patterns: any) => {
-  // Determine optimal inventory levels
+const determineOptimalLevels = (patterns: InventoryPatterns): { safety: number; target: number } => {
   return {
     safety: Math.ceil(Math.random() * 50),
     target: Math.ceil(Math.random() * 150),
   };
 };
 
-const generateInventoryRecommendations = (patterns: any) => {
-  // Generate inventory recommendations
+const generateInventoryRecommendations = (patterns: InventoryPatterns): string[] => {
   return ["Adjust safety stock", "Optimize order frequency"];
 };
 
-const calculatePurchaseFrequency = (data: any) => Math.random() * 30;
-const calculateLastPurchase = (data: any) => Math.random() * 30;
-const calculateTotalSpend = (data: any) => Math.random() * 1000;
+const calculatePurchaseFrequency = (data: unknown): number => Math.random() * 30;
+const calculateLastPurchase = (data: unknown): number => Math.random() * 30;
+const calculateTotalSpend = (data: unknown): number => Math.random() * 1000;

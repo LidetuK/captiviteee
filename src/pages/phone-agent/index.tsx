@@ -11,14 +11,14 @@ const PhoneAgentPage = () => {
       <h1 className="text-3xl font-bold mb-8">AI Phone Agent Platform</h1>
 
       <Tabs defaultValue="builder" className="space-y-8">
-        <TabsList>
-          <TabsTrigger value="builder">
+        <TabsList className="w-full">
+          <TabsTrigger value="builder" className="flex-1">
             <Bot className="mr-2 h-4 w-4" /> Agent Builder
           </TabsTrigger>
-          <TabsTrigger value="monitor">
+          <TabsTrigger value="monitor" className="flex-1">
             <Phone className="mr-2 h-4 w-4" /> Live Monitor
           </TabsTrigger>
-          <TabsTrigger value="analytics">
+          <TabsTrigger value="analytics" className="flex-1">
             <BarChart className="mr-2 h-4 w-4" /> Analytics
           </TabsTrigger>
         </TabsList>

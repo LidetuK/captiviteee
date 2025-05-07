@@ -1,13 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Facebook,
   Twitter,
   Linkedin,
   Instagram,
-  ArrowRight,
   Code,
   Terminal,
   Database,
@@ -23,9 +21,11 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Company Info */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold gradient-text cursor-pointer">
-              Captivite
-            </h3>
+            <Link to="/CAPTIVITE-X">
+              <h3 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-purple-500 to-secondary cursor-pointer">
+                Captivite
+              </h3>
+            </Link>
             <p className="text-muted-foreground">
               Transforming businesses through intelligent automation and
               AI-powered solutions.
@@ -47,11 +47,11 @@ const Footer = () => {
             <h4 className="font-semibold">Quick Links</h4>
             <ul className="space-y-2">
               {[
-                { name: "About Us", path: "/about" },
-                { name: "Features", path: "/features" },
-                { name: "Pricing", path: "/pricing" },
-                { name: "Blog", path: "/blog" },
-                { name: "Contact", path: "/contact" },
+                { name: "About Us", path: "/CAPTIVITE-X/about" },
+                { name: "Features", path: "/CAPTIVITE-X/features" },
+                { name: "Pricing", path: "/CAPTIVITE-X/pricing" },
+                { name: "Blog", path: "/CAPTIVITE-X/blog" },
+                { name: "Contact", path: "/CAPTIVITE-X/contact" },
                 { name: "Login", path: "/login" },
               ].map((item) => (
                 <li key={item.name}>
@@ -71,10 +71,10 @@ const Footer = () => {
             <h4 className="font-semibold">Resources</h4>
             <ul className="space-y-2">
               {[
-                { name: "Documentation", path: "/docs" },
-                { name: "Support", path: "/help" },
-                { name: "API", path: "/api-docs" },
-                { name: "Privacy Policy", path: "/privacy" },
+                { name: "Documentation", path: "/CAPTIVITE-X/docs" },
+                { name: "Support", path: "/CAPTIVITE-X/help" },
+                { name: "API", path: "/CAPTIVITE-X/api-docs" },
+                { name: "Privacy Policy", path: "/CAPTIVITE-X/privacy" },
               ].map((item) => (
                 <li key={item.name}>
                   <Link
@@ -97,7 +97,7 @@ const Footer = () => {
                 className="w-full justify-start"
                 asChild
               >
-                <Link to="/api-explorer">
+                <Link to="/CAPTIVITE-X/api-explorer">
                   <Code className="mr-2 h-4 w-4" />
                   API Explorer
                 </Link>
@@ -107,7 +107,7 @@ const Footer = () => {
                 className="w-full justify-start"
                 asChild
               >
-                <Link to="/database-explorer">
+                <Link to="/CAPTIVITE-X/database-explorer">
                   <Database className="mr-2 h-4 w-4" />
                   Database Explorer
                 </Link>
@@ -117,7 +117,7 @@ const Footer = () => {
                 className="w-full justify-start"
                 asChild
               >
-                <Link to="/webhooks">
+                <Link to="/CAPTIVITE-X/webhooks">
                   <Webhook className="mr-2 h-4 w-4" />
                   Webhooks
                 </Link>
@@ -127,7 +127,7 @@ const Footer = () => {
                 className="w-full justify-start"
                 asChild
               >
-                <Link to="/terminal">
+                <Link to="/CAPTIVITE-X/terminal">
                   <Terminal className="mr-2 h-4 w-4" />
                   Console
                 </Link>
@@ -137,7 +137,7 @@ const Footer = () => {
                 className="w-full justify-start"
                 asChild
               >
-                <Link to="/api-docs">
+                <Link to="/CAPTIVITE-X/api-docs">
                   <FileCode className="mr-2 h-4 w-4" />
                   API Docs
                 </Link>
@@ -147,7 +147,7 @@ const Footer = () => {
                 className="w-full justify-start"
                 asChild
               >
-                <Link to="/dev-settings">
+                <Link to="/CAPTIVITE-X/dev-settings">
                   <Settings className="mr-2 h-4 w-4" />
                   Developer Settings
                 </Link>
@@ -162,13 +162,13 @@ const Footer = () => {
               © {new Date().getFullYear()} Captivite. All rights reserved.
             </p>
             <div className="flex gap-4 text-sm text-muted-foreground">
-              <Link to="/terms" className="hover:text-primary">
+              <Link to="/CAPTIVITE-X/terms" className="hover:text-primary">
                 Terms
               </Link>
-              <Link to="/privacy" className="hover:text-primary">
+              <Link to="/CAPTIVITE-X/privacy" className="hover:text-primary">
                 Privacy
               </Link>
-              <Link to="/cookies" className="hover:text-primary">
+              <Link to="/CAPTIVITE-X/cookies" className="hover:text-primary">
                 Cookies
               </Link>
             </div>

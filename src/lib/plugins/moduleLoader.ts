@@ -1,3 +1,5 @@
+import { randomUUID } from 'crypto';
+
 interface CustomModule {
   id: string;
   name: string;
@@ -12,7 +14,7 @@ export const moduleLoader = {
 
   loadModule: async (module: Omit<CustomModule, "id" | "enabled">) => {
     const newModule: CustomModule = {
-      id: crypto.randomUUID(),
+      id: randomUUID(),
       ...module,
       enabled: true,
     };
@@ -22,8 +24,9 @@ export const moduleLoader = {
       await validateModule(newModule);
       moduleLoader.modules.set(newModule.id, newModule);
       return newModule;
-    } catch (error) {
-      throw new Error(`Failed to load module: ${error.message}`);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      throw new Error(`Failed to load module: ${errorMessage}`);
     }
   },
 
@@ -34,8 +37,9 @@ export const moduleLoader = {
     try {
       const fn = new Function("context", module.code);
       return await fn(context);
-    } catch (error) {
-      throw new Error(`Failed to execute module: ${error.message}`);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      throw new Error(`Failed to execute module: ${errorMessage}`);
     }
   },
 

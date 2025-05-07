@@ -38,7 +38,7 @@ export const mlPipeline = {
     const model = await trainOnData(trainSet, config);
 
     // Validate model
-    const metrics = await validateModel(model, validSet);
+    const metrics = await mlPipeline.validateModel(model, validSet);
 
     return { model, metrics };
   },

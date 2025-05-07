@@ -15,6 +15,11 @@ interface SLAMetrics {
   satisfaction: number;
 }
 
+interface ValidationResult {
+  accuracy: number;
+  [key: string]: any;
+}
+
 export const qualityMonitor = {
   metrics: new Map<string, ConversationMetrics[]>(),
   slaTargets: new Map<string, SLAMetrics>(),
@@ -73,7 +78,7 @@ export const qualityMonitor = {
   },
 
   validateTrainingData: async (data: any[]) => {
-    const validationResults = [];
+    const validationResults: ValidationResult[] = [];
     for (const item of data) {
       const accuracy = await qualityMonitor.validateResponse(
         item.response,
@@ -113,8 +118,8 @@ const calculateTrend = (
   return change > 0 ? "improving" : "declining";
 };
 
-const generateRecommendations = (metrics: Record<string, number>) => {
-  const recommendations = [];
+const generateRecommendations = (metrics: Record<string, number>): string[] => {
+  const recommendations: string[] = [];
 
   if (metrics.accuracy < 0.9) {
     recommendations.push(

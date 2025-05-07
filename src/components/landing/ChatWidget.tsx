@@ -3,18 +3,40 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar } from "@/components/ui/avatar";
-import { MessageCircle, X, Minus, Send, Bot } from "lucide-react";
+import {
+  MessageCircle,
+  X,
+  Minus,
+  Send,
+  Bot,
+  ThumbsUp,
+  ThumbsDown,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { api } from "@/lib/api";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Message {
   id: number;
   text: string;
   sender: "user" | "bot";
   timestamp: Date;
+  feedback?: "positive" | "negative" | null;
 }
 
-const ChatWidget = ({
+interface ChatWidgetProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+  onSend?: (message: string) => void;
+  messages?: Message[];
+}
+
+const ChatWidget: React.FC<ChatWidgetProps> = ({
   isOpen: initialIsOpen = true,
   onClose = () => {},
   onSend = () => {},
@@ -45,7 +67,7 @@ const ChatWidget = ({
   const handleSend = async () => {
     if (!newMessage.trim()) return;
 
-    const userMessage = {
+    const userMessage: Message = {
       id: messages.length + 1,
       text: newMessage,
       sender: "user",
@@ -58,12 +80,19 @@ const ChatWidget = ({
     setIsTyping(true);
 
     try {
-      const response = await api.chat.send(newMessage);
-      const botMessage = {
+      // Simulate API delay
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      // In a real app, you would use the actual API
+      // const response = await api.chat.send(newMessage);
+      const botResponse = getAIResponse(newMessage);
+
+      const botMessage: Message = {
         id: messages.length + 2,
-        text: response.message,
+        text: botResponse,
         sender: "bot",
         timestamp: new Date(),
+        feedback: null,
       };
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
@@ -73,7 +102,32 @@ const ChatWidget = ({
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const getAIResponse = (userMessage: string): string => {
+    const lowerCaseMessage = userMessage.toLowerCase();
+
+    if (lowerCaseMessage.includes("hello") || lowerCaseMessage.includes("hi")) {
+      return "Hello! How can I assist you with Captivite today?";
+    } else if (
+      lowerCaseMessage.includes("pricing") ||
+      lowerCaseMessage.includes("cost")
+    ) {
+      return "We offer flexible pricing plans starting at $49/month for small businesses. Would you like me to provide more details about our pricing tiers?";
+    } else if (
+      lowerCaseMessage.includes("demo") ||
+      lowerCaseMessage.includes("trial")
+    ) {
+      return "I'd be happy to set up a demo for you! You can schedule one directly through our calendar or I can have a team member reach out to you. What works best?";
+    } else if (
+      lowerCaseMessage.includes("feature") ||
+      lowerCaseMessage.includes("capabilities")
+    ) {
+      return "Captivite offers AI-powered business automation including smart scheduling, customer engagement, analytics, and seamless integrations. Which specific feature would you like to learn more about?";
+    } else {
+      return "Thank you for your message. I'd be happy to help with that. Could you provide a bit more information so I can assist you better?";
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
@@ -83,6 +137,17 @@ const ChatWidget = ({
   const handleClose = () => {
     setIsOpen(false);
     onClose();
+  };
+
+  const provideFeedback = (
+    messageId: number,
+    type: "positive" | "negative",
+  ) => {
+    setMessages((prev) =>
+      prev.map((msg) =>
+        msg.id === messageId ? { ...msg, feedback: type } : msg,
+      ),
+    );
   };
 
   if (!isOpen) {
@@ -164,9 +229,52 @@ const ChatWidget = ({
                       <p className="text-sm whitespace-pre-wrap break-words">
                         {message.text}
                       </p>
-                      <span className="text-xs opacity-75 mt-1 block">
-                        {message.timestamp.toLocaleTimeString()}
-                      </span>
+                      <div className="flex items-center justify-between mt-1">
+                        <span className="text-xs opacity-75">
+                          {message.timestamp.toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </span>
+                        {message.sender === "bot" && (
+                          <div className="flex gap-1">
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className={`h-6 w-6 rounded-full ${message.feedback === "positive" ? "text-green-500 bg-green-500/10" : ""}`}
+                                    onClick={() =>
+                                      provideFeedback(message.id, "positive")
+                                    }
+                                  >
+                                    <ThumbsUp className="h-3 w-3" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>Helpful</TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className={`h-6 w-6 rounded-full ${message.feedback === "negative" ? "text-red-500 bg-red-500/10" : ""}`}
+                                    onClick={() =>
+                                      provideFeedback(message.id, "negative")
+                                    }
+                                  >
+                                    <ThumbsDown className="h-3 w-3" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>Not helpful</TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </motion.div>
                 ))}

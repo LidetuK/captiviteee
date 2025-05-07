@@ -1,5 +1,6 @@
 import React from "react";
 import { Card } from "@/components/ui/card";
+import { Link } from "react-router-dom";
 import LazyImage from "@/components/ui/image";
 import {
   Carousel,
@@ -9,7 +10,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Avatar } from "@/components/ui/avatar";
-import { Star, Quote } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Star, Quote, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface Testimonial {
@@ -230,7 +232,7 @@ const TestimonialSection = ({
   testimonials = defaultTestimonials,
 }: TestimonialSectionProps) => {
   return (
-    <section className="w-full py-16 relative overflow-hidden bg-gradient-to-br from-primary/10 via-purple-500/5 to-secondary/10 animate-gradient-slow">
+    <section className="py-20 bg-gradient-to-br from-primary/10 via-purple-500/5 to-secondary/10 relative overflow-hidden">
       {/* Animated background elements */}
       <motion.div
         className="absolute inset-0 opacity-30"
@@ -338,6 +340,15 @@ const TestimonialSection = ({
             <CarouselNext className="-right-12" />
           </div>
         </Carousel>
+
+        <div className="mt-12 text-center">
+          <Button variant="outline" size="lg" asChild>
+            <Link to="/CAPTIVITE-X/case-studies">
+              View Customer Success Stories{" "}
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
       </div>
     </section>
   );

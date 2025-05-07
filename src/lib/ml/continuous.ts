@@ -11,6 +11,17 @@ interface FeedbackData {
   timestamp: Date;
 }
 
+interface TrainingData {
+  id: string;
+  text: string;
+  labels: string[];
+  metadata: {
+    correct: boolean;
+    userFeedback?: string;
+  };
+  timestamp: Date;
+}
+
 export const continuousLearning = {
   feedbackQueue: new Map<string, FeedbackData[]>(),
   retrainingThreshold: 100, // Number of feedback items before retraining
@@ -86,11 +97,25 @@ export const continuousLearning = {
   manageDataset: async (modelId: string) => {
     const feedbackList = continuousLearning.feedbackQueue.get(modelId) || [];
 
+    // Convert FeedbackData to TrainingData
+    const trainingData: TrainingData[] = feedbackList.map(feedback => ({
+      id: crypto.randomUUID(),
+      text: feedback.input,
+      labels: [feedback.output],
+      metadata: {
+        correct: feedback.correct,
+        userFeedback: feedback.userFeedback
+      },
+      timestamp: feedback.timestamp
+    }));
+
     // Clean and preprocess data
-    const cleanedData = await mlPipeline.preprocessData(feedbackList);
+    const cleanedData = await mlPipeline.preprocessData(trainingData);
 
     // Store processed data
-    await mlPipeline.collectData(cleanedData);
+    for (const data of cleanedData) {
+      await mlPipeline.collectData(data);
+    }
 
     return cleanedData;
   },

@@ -16,17 +16,25 @@ interface ResourceMetrics {
   };
 }
 
+interface ResourceRequirements {
+  cpu: number;
+  memory: number;
+  disk: number;
+}
+
+interface ResourceUsage {
+  cpu?: number;
+  memory?: number;
+  disk?: number;
+}
+
 export const resourceManager = {
   resources: new Map<string, ResourceMetrics>(),
 
   allocateResources: async (
     serviceId: string,
-    requirements: {
-      cpu: number;
-      memory: number;
-      disk: number;
-    },
-  ) => {
+    requirements: ResourceRequirements,
+  ): Promise<ResourceMetrics> => {
     const available = resourceManager.getAvailableResources();
 
     if (
@@ -61,12 +69,8 @@ export const resourceManager = {
 
   updateUsage: (
     serviceId: string,
-    usage: {
-      cpu?: number;
-      memory?: number;
-      disk?: number;
-    },
-  ) => {
+    usage: ResourceUsage,
+  ): ResourceMetrics | null => {
     const resources = resourceManager.resources.get(serviceId);
     if (!resources) return null;
 
@@ -88,8 +92,8 @@ export const resourceManager = {
     return resources;
   },
 
-  getAvailableResources: () => {
-    const total = {
+  getAvailableResources: (): ResourceMetrics => {
+    const total: ResourceMetrics = {
       cpu: { total: 100, used: 0, available: 100 },
       memory: { total: 1024, used: 0, available: 1024 },
       disk: { total: 10000, used: 0, available: 10000 },
@@ -108,8 +112,8 @@ export const resourceManager = {
     return total;
   },
 
-  optimizeResources: () => {
-    const recommendations = [];
+  optimizeResources: (): string[] => {
+    const recommendations: string[] = [];
     const available = resourceManager.getAvailableResources();
 
     if (available.cpu.available < available.cpu.total * 0.2) {

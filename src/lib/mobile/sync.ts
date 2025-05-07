@@ -35,7 +35,7 @@ export const syncManager = {
 
   processQueue: async (resource: string) => {
     const queue = syncManager.operations.get(resource) || [];
-    const results = [];
+    const results: SyncOperation[] = [];
 
     for (const operation of queue) {
       try {

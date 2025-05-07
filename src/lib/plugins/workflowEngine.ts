@@ -14,6 +14,12 @@ interface Workflow {
   enabled: boolean;
 }
 
+interface WorkflowResult {
+  stepId: string;
+  result?: { executed: boolean };
+  error?: string;
+}
+
 export const workflowEngine = {
   workflows: new Map<string, Workflow>(),
 
@@ -32,11 +38,11 @@ export const workflowEngine = {
     const workflow = workflowEngine.workflows.get(workflowId);
     if (!workflow || !workflow.enabled) return null;
 
-    const results = [];
+    const results: WorkflowResult[] = [];
     let currentSteps = [workflow.steps[workflow.trigger]];
 
     while (currentSteps.length > 0) {
-      const nextSteps = [];
+      const nextSteps: WorkflowStep[] = [];
 
       for (const step of currentSteps) {
         if (step.condition && !step.condition(context)) continue;

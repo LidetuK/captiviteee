@@ -8,6 +8,13 @@ interface Webhook {
   failureCount: number;
 }
 
+interface WebhookResult {
+  webhookId: string;
+  success: boolean;
+  result?: any;
+  error?: string;
+}
+
 export const webhookManager = {
   webhooks: new Map<string, Webhook>(),
 
@@ -24,7 +31,7 @@ export const webhookManager = {
   },
 
   trigger: async (event: string, payload: any) => {
-    const results = [];
+    const results: WebhookResult[] = [];
     for (const webhook of webhookManager.webhooks.values()) {
       if (!webhook.enabled || !webhook.events.includes(event)) continue;
 

@@ -9,6 +9,11 @@ interface Credit {
   createdAt: Date;
 }
 
+interface UsedCredit {
+  creditId: string;
+  amountUsed: number;
+}
+
 export const creditManager = {
   credits: new Map<string, Credit[]>(),
 
@@ -41,7 +46,7 @@ export const creditManager = {
     );
 
     let remainingAmount = amount;
-    const usedCredits = [];
+    const usedCredits: UsedCredit[] = [];
 
     for (const credit of availableCredits) {
       const availableAmount = credit.amount - credit.usedAmount;

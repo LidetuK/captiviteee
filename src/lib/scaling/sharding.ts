@@ -6,10 +6,15 @@ interface Shard {
   size: number;
 }
 
+interface ShardService {
+  id: string;
+  shards: Shard[];
+}
+
 export const shardManager = {
   shards: new Map<string, Shard[]>(),
 
-  createShard: (serviceId: string, range: [number, number], node: string) => {
+  createShard: (serviceId: string, range: [number, number], node: string): Shard => {
     const shard: Shard = {
       id: crypto.randomUUID(),
       range,
@@ -26,7 +31,7 @@ export const shardManager = {
     return shard;
   },
 
-  getShard: (serviceId: string, key: number) => {
+  getShard: (serviceId: string, key: number): Shard | undefined => {
     const shards = shardManager.shards.get(serviceId) || [];
     return shards.find(
       (shard) =>
@@ -36,12 +41,12 @@ export const shardManager = {
     );
   },
 
-  rebalanceShards: async (serviceId: string) => {
+  rebalanceShards: async (serviceId: string): Promise<Shard[]> => {
     const shards = shardManager.shards.get(serviceId) || [];
     const totalSize = shards.reduce((sum, shard) => sum + shard.size, 0);
     const targetSize = totalSize / shards.length;
 
-    const rebalancing = [];
+    const rebalancing: Shard[] = [];
 
     for (const shard of shards) {
       if (Math.abs(shard.size - targetSize) > targetSize * 0.2) {
@@ -61,7 +66,7 @@ export const shardManager = {
     return rebalancing;
   },
 
-  addNode: async (serviceId: string, node: string) => {
+  addNode: async (serviceId: string, node: string): Promise<Shard | null> => {
     const shards = shardManager.shards.get(serviceId) || [];
     if (shards.length === 0) {
       return shardManager.createShard(serviceId, [0, 1000000], node);

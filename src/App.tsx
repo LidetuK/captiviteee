@@ -1,145 +1,92 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-  useLocation,
-} from "react-router-dom";
-import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { PrivateRoute } from "@/lib/auth";
-import { PageTransition } from "@/components/ui/page-transition";
-import { useLoading } from "@/lib/store";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/home";
+import AboutUs from "./components/landing/AboutUs";
+import FeaturesPage from "./components/landing/FeaturesPage";
+import DocsPage from "./components/landing/DocsPage";
+import HelpPage from "./components/landing/HelpPage";
+import ApiDocsPage from "./components/landing/ApiDocsPage";
+import PrivacyPage from "./components/landing/PrivacyPage";
+import LoginPage from "./components/auth/LoginPage";
 import MainLayout from "./components/layout/MainLayout";
-import TempoRoutes from "./components/TempoRoutes";
-import LoginPage from "./pages/auth/login";
-import DashboardLayout from "./components/layout/DashboardLayout";
-
-// Dashboard Pages
-import DashboardPage from "./pages/dashboard";
+import Dashboard from "./components/dashboard/Dashboard";
 import AnalyticsPage from "./pages/dashboard/analytics";
 import CustomersPage from "./pages/dashboard/customers";
-import AppointmentsPage from "./pages/dashboard/appointments";
 import MessagesPage from "./pages/dashboard/messages";
-import SettingsPage from "./pages/dashboard/settings";
-import BillingPage from "./pages/dashboard/billing";
+import PhoneAgentPage from "./pages/phone-agent/index";
+import AIAssistantPanel from "./components/dashboard/AIAssistantPanel";
 import SmartAnalyticsPage from "./pages/dashboard/smart-analytics";
+import ReputationPage from "./pages/ReputationPage";
+import AppointmentsPage from "./pages/dashboard/appointments";
+import BillingPage from "./pages/dashboard/billing";
+import SocialMediaDashboard from "./components/social-media/SocialMediaDashboard";
 import NotificationsPage from "./pages/dashboard/notifications";
 import OrganizationPage from "./pages/dashboard/organization";
 import IntegrationsPage from "./pages/dashboard/integrations";
+import SettingsPage from "./pages/dashboard/settings";
+import TextBackPage from "./pages/features/text-back";
+import SchedulingPage from "./pages/features/scheduling";
+import ReputationFeaturePage from "./pages/features/reputation";
+import AnalyticsFeaturePage from "./pages/features/analytics";
+import AIAssistantFeaturePage from "./pages/features/ai-assistant";
+import IntegrationsFeaturePage from "./pages/features/integrations";
+import HealthcarePage from "./pages/solutions/healthcare";
+import RetailPage from "./pages/solutions/retail";
+import ProfessionalServicesPage from "./pages/solutions/professional-services";
+import HospitalityPage from "./pages/solutions/hospitality";
+import RealEstatePage from "./pages/solutions/real-estate";
+import ContentPage from "./pages/resources/content";
+import CaseStudiesPage from "./pages/resources/case-studies";
+import CommunityPage from "./pages/resources/community";
+import ResourceBlogPage from "./pages/resources/blog";
+import PartnersPage from "./pages/resources/partners";
 
-// Feature Pages
-import PhoneAgentPage from "./pages/phone-agent";
-import AIAssistantPage from "./pages/features/ai-assistant";
-import ReputationPage from "./pages/features/reputation";
 
-// Developer Pages
-import APIExplorer from "./pages/developer/api-explorer";
-import DatabaseExplorer from "./pages/developer/database-explorer";
-import WebhooksPage from "./pages/developer/webhooks";
-import TerminalPage from "./pages/developer/terminal";
-import DeveloperSettings from "./pages/developer/settings";
-import DocsPage from "./pages/resources/docs";
-import HelpPage from "./pages/resources/help";
-
-export function AppLayout({ children }: { children: React.ReactNode }) {
-  const location = useLocation();
-  const isDashboardRoute = [
-    "/dashboard",
-    "/phone-agent",
-    "/api-explorer",
-    "/docs",
-    "/help",
-  ].some((path) => location.pathname.startsWith(path));
-
-  if (location.pathname === "/login") {
-    return children;
-  }
-
-  if (isDashboardRoute) {
-    return <DashboardLayout>{children}</DashboardLayout>;
-  }
-
-  return <MainLayout>{children}</MainLayout>;
-}
-
-export default function App() {
-  const isLoading = useLoading((state) => state.isLoading);
-
+function App() {
   return (
     <Router>
-      <ErrorBoundary>
-        <AppLayout>
-          {isLoading && (
-            <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
-              <LoadingSpinner />
-            </div>
-          )}
-          {/* Tempo routes */}
-          {import.meta.env.VITE_TEMPO && <TempoRoutes />}
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<LoginPage />} />
-
-            {/* Protected Routes */}
-            <Route element={<PrivateRoute />}>
-              {/* Dashboard Routes */}
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/dashboard/analytics" element={<AnalyticsPage />} />
-              <Route path="/dashboard/customers" element={<CustomersPage />} />
-              <Route
-                path="/dashboard/appointments"
-                element={<AppointmentsPage />}
-              />
-              <Route path="/dashboard/messages" element={<MessagesPage />} />
-              <Route path="/dashboard/settings" element={<SettingsPage />} />
-              <Route path="/dashboard/billing" element={<BillingPage />} />
-              <Route
-                path="/dashboard/smart-analytics"
-                element={<SmartAnalyticsPage />}
-              />
-              <Route
-                path="/dashboard/ai-assistant"
-                element={<AIAssistantPage />}
-              />
-              <Route
-                path="/dashboard/reputation"
-                element={<ReputationPage />}
-              />
-              <Route
-                path="/dashboard/notifications"
-                element={<NotificationsPage />}
-              />
-              <Route
-                path="/dashboard/organization"
-                element={<OrganizationPage />}
-              />
-              <Route
-                path="/dashboard/integrations"
-                element={<IntegrationsPage />}
-              />
-
-              {/* Feature Routes */}
-              <Route path="/phone-agent" element={<PhoneAgentPage />} />
-
-              {/* Developer Routes */}
-              <Route path="/api-explorer" element={<APIExplorer />} />
-              <Route path="/docs" element={<DocsPage />} />
-              <Route path="/help" element={<HelpPage />} />
-              <Route path="/database-explorer" element={<DatabaseExplorer />} />
-              <Route path="/webhooks" element={<WebhooksPage />} />
-              <Route path="/terminal" element={<TerminalPage />} />
-              <Route path="/dev-settings" element={<DeveloperSettings />} />
-            </Route>
-
-            {/* Catch all route */}
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </AppLayout>
-      </ErrorBoundary>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/features" element={<FeaturesPage />} />
+        <Route path="/features/text-back" element={<TextBackPage />} />
+        <Route path="/features/scheduling" element={<SchedulingPage />} />
+        <Route path="/features/reputation" element={<ReputationFeaturePage />} />
+        <Route path="/features/analytics" element={<AnalyticsFeaturePage />} />
+        <Route path="/features/ai-assistant" element={<AIAssistantFeaturePage />} />
+        <Route path="/features/integrations" element={<IntegrationsFeaturePage />} />
+        <Route path="/solutions/healthcare" element={<HealthcarePage />} />
+        <Route path="/solutions/retail" element={<RetailPage />} />
+        <Route path="/solutions/professional-services" element={<ProfessionalServicesPage />} />
+        <Route path="/solutions/hospitality" element={<HospitalityPage />} />
+        <Route path="/solutions/real-estate" element={<RealEstatePage />} />
+        <Route path="/content" element={<ContentPage />} />
+        <Route path="/case-studies" element={<CaseStudiesPage />} />
+        <Route path="/community" element={<CommunityPage />} />
+        <Route path="/blog" element={<ResourceBlogPage />} />
+        <Route path="/help" element={<HelpPage />} />
+        <Route path="/api-docs" element={<ApiDocsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/partners" element={<PartnersPage />} />
+        <Route path="/docs" element={<DocsPage />} />
+        <Route path="/dashboard" element={<MainLayout><Dashboard /></MainLayout>} />
+        <Route path="/analytics" element={<MainLayout><AnalyticsPage /></MainLayout>} />
+        <Route path="/customers" element={<MainLayout><CustomersPage /></MainLayout>} />
+        <Route path="/messages" element={<MainLayout><MessagesPage /></MainLayout>} />
+        <Route path="/phone-agent" element={<MainLayout><PhoneAgentPage /></MainLayout>} />
+        <Route path="/ai-assistant" element={<MainLayout><AIAssistantPanel /></MainLayout>} />
+        <Route path="/smart-analytics" element={<MainLayout><SmartAnalyticsPage /></MainLayout>} />
+        <Route path="/reputation" element={<ReputationPage />} />
+        <Route path="/appointments" element={<MainLayout><AppointmentsPage /></MainLayout>} />
+        <Route path="/billing" element={<MainLayout><BillingPage /></MainLayout>} />
+        <Route path="/social-media" element={<MainLayout><SocialMediaDashboard /></MainLayout>} />
+        <Route path="/notifications" element={<MainLayout><NotificationsPage /></MainLayout>} />
+        <Route path="/organization" element={<MainLayout><OrganizationPage /></MainLayout>} />
+        <Route path="/integrations" element={<MainLayout><IntegrationsPage /></MainLayout>} />
+        <Route path="/settings" element={<MainLayout><SettingsPage /></MainLayout>} />
+      </Routes>
     </Router>
   );
 }
+
+export default App;

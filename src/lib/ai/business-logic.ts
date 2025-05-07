@@ -1,5 +1,10 @@
 import { messaging } from "../messaging";
 import { nlp } from "./nlp";
+import { OpenAI } from "openai";
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export const businessLogic = {
   handleCustomerQuery: async (query: string, context: any) => {

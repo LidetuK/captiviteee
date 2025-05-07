@@ -105,8 +105,8 @@ const average = (numbers: number[]): number => {
 const generateRecommendations = (
   metrics: PerformanceMetrics[],
   benchmark?: Record<string, number>,
-) => {
-  const recommendations = [];
+): string[] => {
+  const recommendations: string[] = [];
   const latest = metrics[metrics.length - 1];
 
   if (latest.errorRate > 0.05) {

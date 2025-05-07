@@ -5,19 +5,27 @@ const openai = new OpenAI({
 });
 
 export const nlp = {
-  classifyIntent: async (text: string) => {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [
-        {
-          role: "system",
-          content: "Classify the intent of the following customer message",
-        },
-        { role: "user", content: text },
-      ],
-      temperature: 0.3,
-    });
-    return response.choices[0].message.content;
+  classifyIntent: async (text: string): Promise<string> => {
+    try {
+      const response = await openai.chat.completions.create({
+        model: "gpt-4",
+        messages: [
+          {
+            role: "system",
+            content: "Classify the intent of the following customer message",
+          },
+          { role: "user", content: text },
+        ],
+        temperature: 0.3,
+      });
+      const content = response.choices[0].message.content;
+      if (typeof content !== 'string') {
+        return "unknown";
+      }
+      return content;
+    } catch (error) {
+      return "unknown";
+    }
   },
 
   extractEntities: async (text: string) => {

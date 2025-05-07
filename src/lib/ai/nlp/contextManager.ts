@@ -10,6 +10,11 @@ interface Context {
     timestamp: Date;
   }>;
   metadata?: Record<string, any>;
+  dialogState?: {
+    currentNode: string;
+    data: Record<string, any>;
+    completed: boolean;
+  };
 }
 
 export const contextManager = {

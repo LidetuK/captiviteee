@@ -2,6 +2,11 @@ import { contextManager } from "../nlp/contextManager";
 import { nlp } from "../nlp";
 import { businessLogic } from "../business-logic";
 
+export interface Context {
+  currentIntent?: string;
+  dialogState?: DialogState;
+}
+
 export interface DialogState {
   currentNode: string;
   data: Record<string, any>;
@@ -15,6 +20,10 @@ export interface DialogNode {
   validation?: (input: string, entities: any) => boolean;
   next?: (input: string, entities: any) => string;
   action?: (input: string, entities: any) => Promise<any>;
+}
+
+interface ResponseContext {
+  intent: string;
 }
 
 export const dialogManager = {
@@ -70,8 +79,8 @@ export const dialogManager = {
     // Update dialog state
     const nextNodeId = currentNode.next
       ? currentNode.next(input, entities)
-      : null;
-    if (nextNodeId) {
+      : "end";
+    if (nextNodeId !== "end") {
       const nextNode = flow[nextNodeId];
       if (nextNode) {
         context.dialogState.currentNode = nextNodeId;
@@ -87,7 +96,8 @@ export const dialogManager = {
   },
 
   handleFallback: async (input: string): Promise<string> => {
-    const intent = await nlp.classifyIntent(input);
+    const intent = (await nlp.classifyIntent(input)) ?? "unknown";
+    // @ts-ignore - We know intent will be a string due to the nullish coalescing operator
     return await businessLogic.generateResponse(input, { intent });
   },
 
@@ -100,6 +110,6 @@ export const dialogManager = {
     context.dialogState = undefined;
     contextManager.updateContext(sessionId, context);
 
-    return "Is there anything else I can help you with?";
+    return "Thank you for your time.";
   },
 };

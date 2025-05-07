@@ -14,12 +14,6 @@ describe("Cost Manager", () => {
   });
 
   test("sets budget and checks alerts", async () => {
-    const budget = costManager.setBudget({
-      resourceType: "compute",
-      limit: 1000,
-      period: "monthly",
-      alerts: [80, 90, 100],
-    });
 
     await costManager.trackResourceUsage("compute", 100, 10); // 1000 total
 

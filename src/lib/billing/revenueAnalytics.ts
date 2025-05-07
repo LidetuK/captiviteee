@@ -48,7 +48,7 @@ export const revenueAnalytics = {
   },
 
   generateInsights: (metrics: RevenueMetrics, trends: any) => {
-    const insights = [];
+    const insights: string[] = [];
 
     if (trends.growth > 0.1) {
       insights.push(

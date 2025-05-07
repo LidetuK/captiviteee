@@ -7,6 +7,11 @@ interface Plugin {
   enabled: boolean;
 }
 
+interface HookResult {
+  pluginId: string;
+  result: any;
+}
+
 export const pluginManager = {
   plugins: new Map<string, Plugin>(),
 
@@ -33,7 +38,7 @@ export const pluginManager = {
   },
 
   executeHook: async (hookName: string, context: any) => {
-    const results = [];
+    const results: HookResult[] = [];
     for (const plugin of pluginManager.plugins.values()) {
       if (!plugin.enabled) continue;
       const hooks = plugin.hooks[hookName] || [];

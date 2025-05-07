@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LazyImage from "@/components/ui/image";
 import {
   NavigationMenu,
@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/navigation-menu";
 import {
   Menu,
-  X,
   MessageSquare,
   Calendar,
   Star,
@@ -30,19 +29,20 @@ import {
   ClipboardList,
   HelpCircle,
   Users,
-  Video,
+  LogIn,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 
 interface NavbarProps {
+  className?: string;
   onDemoClick?: () => void;
   onConsultationClick?: () => void;
   logo?: string;
 }
 
-const defaultLogo = "/assets/LOGO.png";
 const Navbar = ({
-  className = "",
+  className,
   onDemoClick = () => {},
   onConsultationClick = () => {},
   logo = "https://api.dicebear.com/7.x/initials/svg?seed=Captivite",
@@ -217,20 +217,15 @@ const Navbar = ({
       <div className="container flex items-center justify-between h-20 px-4 mx-auto">
         {/* Logo */}
         <div className="flex items-center">
-          <div onClick={() => navigate("/")} className="cursor-pointer">
+          <Link to="/CAPTIVITE-X" className="flex items-center">
             <LazyImage
               src="/assets/LOGO.png"
               alt="Captivite Logo"
-              className="w-40 h-40 object-contain" // Increased size
+              className="w-40 h-40 object-contain"
               fallback="https://api.dicebear.com/7.x/initials/svg?seed=C"
             />
-          </div>
-          <span
-            onClick={() => navigate("/")}
-            className="ml-2 text-xl font-bold cursor-pointer"
-          >
-            Captivite
-          </span>
+            <span className="ml-2 text-xl font-bold">Captivite</span>
+          </Link>
         </div>
 
         {/* Desktop Navigation */}
@@ -243,33 +238,33 @@ const Navbar = ({
                   <NavigationMenuContent>
                     <div className="grid gap-3 p-4 w-[400px]">
                       {item.items.map((subItem) => (
-                        <NavigationMenuLink
+                        <Link
                           key={subItem.title}
-                          className="block p-3 space-y-1 cursor-pointer hover:bg-accent rounded-md relative"
-                          onClick={() => {
-                            if (subItem.href) {
-                              navigate(subItem.href);
-                            }
-                          }}
+                          to={subItem.href || "#"}
+                          className={
+                            subItem.comingSoon ? "pointer-events-none" : ""
+                          }
                         >
-                          <div className="flex items-center gap-2">
-                            <div className="text-primary">{subItem.icon}</div>
-                            <div className="font-medium">{subItem.title}</div>
-                            {subItem.isNew && (
-                              <span className="px-2 py-0.5 text-xs bg-primary/10 text-primary rounded-full">
-                                New
-                              </span>
-                            )}
-                            {subItem.comingSoon && (
-                              <span className="px-2 py-0.5 text-xs bg-muted text-muted-foreground rounded-full">
-                                Coming Soon
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-sm text-muted-foreground">
-                            {subItem.description}
-                          </p>
-                        </NavigationMenuLink>
+                          <NavigationMenuLink className="block p-3 space-y-1 cursor-pointer hover:bg-accent rounded-md relative">
+                            <div className="flex items-center gap-2">
+                              <div className="text-primary">{subItem.icon}</div>
+                              <div className="font-medium">{subItem.title}</div>
+                              {subItem.isNew && (
+                                <span className="px-2 py-0.5 text-xs bg-primary/10 text-primary rounded-full">
+                                  New
+                                </span>
+                              )}
+                              {subItem.comingSoon && (
+                                <span className="px-2 py-0.5 text-xs bg-muted text-muted-foreground rounded-full">
+                                  Coming Soon
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-sm text-muted-foreground">
+                              {subItem.description}
+                            </p>
+                          </NavigationMenuLink>
+                        </Link>
                       ))}
                     </div>
                   </NavigationMenuContent>
@@ -282,8 +277,10 @@ const Navbar = ({
             <Button variant="outline" onClick={onDemoClick}>
               Schedule Demo
             </Button>
-            <Button onClick={() => navigate("/get-started")}>
-              Get Started
+            <Button asChild>
+              <Link to="/login">
+                <LogIn className="mr-2 h-4 w-4" /> Login
+              </Link>
             </Button>
           </div>
         </div>
@@ -307,13 +304,17 @@ const Navbar = ({
                           key={subItem.title}
                           variant="ghost"
                           className="w-full justify-start"
-                          onClick={() => {
-                            if (subItem.href) {
-                              navigate(subItem.href);
-                            }
-                          }}
+                          asChild
+                          disabled={subItem.comingSoon}
                         >
-                          {subItem.title}
+                          <Link to={subItem.href || "#"}>
+                            {subItem.title}
+                            {subItem.isNew && (
+                              <span className="ml-2 px-2 py-0.5 text-xs bg-primary/10 text-primary rounded-full">
+                                New
+                              </span>
+                            )}
+                          </Link>
                         </Button>
                       ))}
                     </div>
@@ -327,11 +328,10 @@ const Navbar = ({
                   >
                     Schedule Demo
                   </Button>
-                  <Button
-                    onClick={() => navigate("/get-started")}
-                    className="w-full"
-                  >
-                    Get Started
+                  <Button className="w-full" asChild>
+                    <Link to="/login">
+                      <LogIn className="mr-2 h-4 w-4" /> Login
+                    </Link>
                   </Button>
                 </div>
               </div>

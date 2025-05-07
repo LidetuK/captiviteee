@@ -41,9 +41,9 @@ export const replicationManager = {
     try {
       // Implement replication logic
       status.status = "synced";
-    } catch (error) {
+    } catch (error: unknown) {
       status.status = "failed";
-      status.errors = [error.message];
+      status.errors = [error instanceof Error ? error.message : 'Unknown error occurred'];
     }
 
     replicationManager.status.set(source, status);

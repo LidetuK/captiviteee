@@ -22,6 +22,18 @@ interface BetaParticipant {
   }>;
 }
 
+interface FeedbackSummary {
+  feature: string;
+  averageRating: number;
+  totalFeedback: number;
+  comments: string[];
+}
+
+interface FeedbackData {
+  ratings: number[];
+  comments: string[];
+}
+
 export const betaManager = {
   programs: new Map<string, BetaProgram>(),
   participants: new Map<string, BetaParticipant[]>(),
@@ -89,11 +101,11 @@ export const betaManager = {
     return participant;
   },
 
-  getFeedbackSummary: (programId: string) => {
+  getFeedbackSummary: (programId: string): FeedbackSummary[] => {
     const participants = betaManager.participants.get(programId) || [];
     const feedback = participants.flatMap((p) => p.feedback);
 
-    const summary = {};
+    const summary: Record<string, FeedbackData> = {};
     feedback.forEach((f) => {
       if (!summary[f.feature]) {
         summary[f.feature] = {
